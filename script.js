@@ -2,9 +2,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log('SA:MP Tools website loaded successfully!');
     initializeWebsite();
+    initializeSlider();
 });
 
 function initializeWebsite() {
+    // Initialize any additional features
+    initializeAdditionalFeatures();
+    
     // Mobile menu toggle
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
@@ -64,21 +68,34 @@ function initializeWebsite() {
             }
         });
     });
+}
 
-    // Add hover effect to tool cards
-    const toolCards = document.querySelectorAll('.tool-card');
-    toolCards.forEach(card => {
-        card.addEventListener('mouseenter', () => {
-            card.style.transform = 'translateY(-5px)';
-        });
+function initializeSlider() {
+    const slides = document.querySelector('.slides');
+    const slideElements = document.querySelectorAll('.slide');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    let currentSlide = 0;
 
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'translateY(0)';
-        });
-    });
+    function updateSlide() {
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
 
-    // Initialize any additional features
-    initializeAdditionalFeatures();
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slideElements.length;
+        updateSlide();
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slideElements.length) % slideElements.length;
+        updateSlide();
+    }
+
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+
+    // Auto-slide every 5 seconds
+    setInterval(nextSlide, 5000);
 }
 
 function initializeAdditionalFeatures() {

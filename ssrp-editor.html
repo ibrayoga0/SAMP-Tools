@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSRP Editor - SA:MP Tools</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="ssrp-editor.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- html2canvas for export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">SA:<span>MP</span> TOOLS</a>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#tools">Tools</a></li>
+                <li><a href="index.html#documentation">Documentation</a></li>
+                <li><a href="index.html#news">News</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="ssrp-main">
+        <div class="container">
+            <div class="tool-header">
+                <h1><i class="fas fa-image"></i> SSRP Editor</h1>
+                <p>Buat screenshot SSRP yang profesional dengan overlay teks untuk aktivitas roleplay dan laporan bisnis Anda.</p>
+            </div>
+
+            <!-- Mobile Notification Banner -->
+            <div class="mobile-notification" id="mobileNotification">
+                <h4><i class="fas fa-desktop"></i> Direkomendasikan: Desktop Mode</h4>
+                <p>Untuk hasil SSRP Editor yang optimal, gunakan Desktop Mode atau putar perangkat ke orientasi lanskap.</p>
+                <a href="#" class="desktop-mode-btn" onclick="requestDesktopMode()">
+                    <i class="fas fa-expand"></i> Enable Desktop Mode
+                </a>
+            </div>
+
+            <div class="editor-container">
+                <!-- Left Panel - Controls -->
+                <div class="controls-panel">
+                    <div class="control-section">
+                        <h3><i class="fas fa-upload"></i> Upload Image</h3>
+                        <div class="upload-area" id="uploadArea">
+                            <input type="file" id="imageInput" accept="image/*" hidden>
+                            <div class="upload-content">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Click to upload image</p>
+                                <span>Supports all image formats</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-section">
+                        <h3><i class="fas fa-crop"></i> Canvas & Image</h3>
+                        <div class="control-group">
+                            <label for="canvasWidth">Canvas Width: <span id="canvasWidthValue">800</span>px</label>
+                            <input type="range" id="canvasWidth" min="400" max="1200" step="50" value="800">
+                        </div>
+                        <div class="control-group">
+                            <label for="canvasHeight">Canvas Height: <span id="canvasHeightValue">600</span>px</label>
+                            <input type="range" id="canvasHeight" min="300" max="900" step="50" value="600">
+                        </div>
+                        <div class="control-group">
+                            <label for="zoomSlider">Zoom: <span id="zoomValue">1.0</span>x</label>
+                            <input type="range" id="zoomSlider" min="0.5" max="3" step="0.1" value="1">
+                        </div>
+                        <div class="control-group">
+                            <label>Image Position: <span class="hint">Klik & seret pada canvas</span></label>
+                        </div>
+                    </div>
+
+                    <div class="control-section">
+                        <h3><i class="fas fa-font"></i> RP Action Text</h3>
+                        <div class="control-group">
+                            <label for="rpTextSpecial">Special Action (auto adds *):</label>
+                            <textarea id="rpTextSpecial" placeholder="Type special action text... (no need to type *)" rows="3"></textarea>
+                        </div>
+                        <div class="control-group">
+                            <label for="rpTextNormal">Normal Action (multi-line):</label>
+                            <textarea id="rpTextNormal" placeholder="Type normal action text..." rows="3"></textarea>
+                        </div>
+                        <div class="control-group">
+                            <label for="fontSize">Font Size: <span id="fontSizeValue">14</span>px</label>
+                            <input type="range" id="fontSize" min="8" max="24" step="1" value="14">
+                        </div>
+                        <div class="control-group">
+                            <label>Text Position: <span class="hint">Klik & seret teks pada canvas</span></label>
+                        </div>
+                    </div>
+
+                    <div class="control-section">
+                        <h3><i class="fas fa-download"></i> Export</h3>
+                        <button id="exportImage" class="btn btn-primary btn-large">
+                            <i class="fas fa-download"></i> Export PNG
+                        </button>
+                        <button id="resetEditor" class="btn btn-secondary">
+                            <i class="fas fa-undo"></i> Reset Editor
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Panel - Canvas -->
+                <div class="canvas-panel">
+                    <div class="canvas-container">
+                        <div class="canvas-wrapper" id="canvasWrapper">
+                            <canvas id="mainCanvas" width="800" height="600"></canvas>
+                            <div class="text-overlay rp-text" id="rpTextOverlay" draggable="true">RP Action Text</div>
+                        </div>
+                        <div class="canvas-info">
+                            <span>Canvas: <span id="canvasSizeDisplay">800 × 600</span> px</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#tools">Tools</a></li>
+                        <li><a href="index.html#documentation">Documentation</a></li>
+                        <li><a href="index.html#news">News</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 SA:MP Tools. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="ssrp-editor.js"></script>
+</body>
+</html> 
