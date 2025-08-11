@@ -26,6 +26,17 @@ class SSRPEditor {
         this.initializeEventListeners();
         this.updateCanvas();
         this.updateTextOverlay();
+        this.loadDefaultImage();
+    }
+
+    loadDefaultImage() {
+        const img = new Image();
+        img.onload = () => {
+            this.currentImage = img;
+            this.resetImagePosition();
+            this.updateCanvas();
+        };
+        img.src = 'images/ssrp-demo.jpg';
     }
 
     initializeEventListeners() {
@@ -513,6 +524,7 @@ class SSRPEditor {
             this.resizeCanvas();
             this.updateCanvas();
             this.updateTextOverlay();
+            this.loadDefaultImage(); // Load default image on reset
             
             alert('Editor reset successfully!');
         }
